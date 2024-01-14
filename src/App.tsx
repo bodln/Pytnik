@@ -1,4 +1,3 @@
-// Import statements for React, hooks, and styles
 import React, { useEffect, useRef, useState } from 'react';
 import Client, { Agent, IPoint, IStep, MapData } from "./Client";
 import Terrain from "./assets/maps/terrain_upscaled.png";
@@ -9,13 +8,11 @@ import Jocke from "./assets/icons/Jocke.png";
 import Micko from "./assets/icons/Micko.png";
 import "./App.css";
 
-// Interface for AgentInfo
 interface AgentInfo {
   name: Agent;
   icon: string;
 }
 
-// Main App component
 const App: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [agents, setAgents] = useState<AgentInfo[]>([
@@ -82,6 +79,7 @@ const App: React.FC = () => {
     setCurrentNode(steps[step].to_node);
     updateAgentPosition(selectedMap.coins[currentNode]);
     setCurrentStep(step);
+    setPauseIndex(step)
   };
 
   useEffect(() => {
@@ -152,22 +150,12 @@ const App: React.FC = () => {
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   useEffect(() => {
-    // console.log("Graph:" )
-    // console.log(graph)
-  }, [graph]);
-
-  useEffect(() => {
     setupMaps();
   }, []);
 
   useEffect(() => {
     console.log("Current node: " + currentNode)
   }, [currentNode]);
-
-  useEffect(() => {
-    // console.log("agent moving:")
-    // console.log(agentMoving)
-  }, [agentMoving]);
 
   useEffect(() => {
     if(pauseSimulation && intervalId != null && !inTransition){
@@ -199,6 +187,18 @@ const App: React.FC = () => {
   }, [selectedMap]);
 
   useEffect(() => {
+    if (steps) {
+      let totalCost = 0;
+      for (let num = 0; num <= currentStep; num++) {
+        if (steps[num]?.from_node !== steps[num]?.to_node) {
+          totalCost += steps[num]?.cost || 0;
+        }
+      }
+      setSumCost(totalCost);
+    }
+  }, [steps, currentStep]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (selectedAgent != null) {
         await calculateSteps();
@@ -220,13 +220,6 @@ const App: React.FC = () => {
       setSelectedMap(mapsData[0])
     }
   }, [mapsData])
-
-  useEffect(() => {
-    if (steps != null) {
-      // console.log("Steps calculated")
-      // console.log(steps)
-    }
-  }, [steps])
 
   const setupMaps = async (): Promise<void> => {
     setLoading(true);
@@ -264,7 +257,6 @@ const App: React.FC = () => {
     }
   };
 
-  /* Add a function to get the tooltip content based on the agent's name */
   const getAgentTooltip = (agentName: string): string => {
     switch (agentName) {
       case "Aki":
@@ -285,7 +277,6 @@ const App: React.FC = () => {
       const currentIndex = mapsData.findIndex((map) => map.map_name === selectedMap.map_name);
       const previousIndex = currentIndex === 0 ? mapsData.length - 1 : currentIndex - 1;
   
-      // Only change the map if it's not the first map
       if (currentIndex !== 0) {
         setSelectedMap(mapsData[previousIndex]);
       }
@@ -297,7 +288,6 @@ const App: React.FC = () => {
       const currentIndex = mapsData.findIndex((map) => map.map_name === selectedMap.map_name);
       const nextIndex = currentIndex === mapsData.length - 1 ? 0 : currentIndex + 1;
   
-      // Only change the map if it's not the last map
       if (currentIndex !== mapsData.length - 1) {
         setSelectedMap(mapsData[nextIndex]);
       }
@@ -393,7 +383,7 @@ const App: React.FC = () => {
       </div>
 
       <div className='controls'>
-        <p>Pokreni simulaciju - Razmak</p>
+        <p>Pokreni/Pauziraj simulaciju - Razmak</p>
         <p>Prikaži konačan rezultat - Enter</p>
         <p>Uključi/Isključi korake na strelice - S ({stepMode ? ("Uključeno") : ("Isključeno")})</p>
       </div>
