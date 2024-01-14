@@ -130,9 +130,9 @@ const App: React.FC = () => {
             }
             console.log("Interval: " + i)
             setInTransition(true)
-            setPauseIndex(i)
+            //setPauseIndex(i)
             moveAgent(i)
-            setSumCost(prevSumCost => prevSumCost + steps[i].cost);
+            //setSumCost(prevSumCost => prevSumCost + steps[i].cost);
             i++
             setInTransition(false)
           }, 600);
