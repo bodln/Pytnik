@@ -1,0 +1,323 @@
+/* Reset default styles */
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/* Set full height and width for the #app container */
+#app {
+    overflow: hidden;
+}
+
+/* Apply common styles to all elements */
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style for the main container */
+#home {
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(24, 87, 104);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Make images take up the full width and height */
+img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Styles for the agent (moving character) */
+.agent {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: left 750ms, top 750ms;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    user-select: none;
+}
+
+/* Styles for the coin */
+.coin {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Ensure coins appear below agents */
+}
+
+/* Styles for elements within .coin */
+
+/* Styles for the coin index label */
+span {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: black;
+}
+
+.map {
+    position: relative;
+    height: 80%;
+    width: 60%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px; /* Space from the top */
+    margin-left: 50px; /* Space from the left */
+    box-shadow: 0 0 10px rgba(48, 152, 181, 0.5);
+    user-select: none;
+}
+
+/* Additional styles for the map container to add a margin at the bottom */
+.map.margin-bottom {
+    margin-bottom: 10px; /* 10px gap between map and header */
+}
+
+/* Styles for the terrain image */
+.map > img {
+    pointer-events: none; /* Disable mouse events on the terrain image */
+}
+
+/* Styles for the header section */
+.header {
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: auto;
+    margin-top: 30px;
+}
+
+/* Styles for the agent selectors */
+.agent-selector {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    position: relative;
+}
+
+.agent-selector > img {
+    height: 60%;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.agent-selector > img:hover {
+    filter: brightness(1.2);
+}
+
+.agent-selector > img:active {
+    filter: brightness(0.8);
+}
+
+.agent-selector > p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* Styles for the map overlay */
+.map-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 0; /* Decrease the z-index value to place it below the coins */
+    pointer-events: none;
+}
+
+/* Styles for the steps container */
+.steps {
+    width: 70%;
+    height: 470px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    user-select: none;
+    color: white;
+    padding: 30px;
+}
+
+.steps-container{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: 40px;
+    margin-right: 50px;
+    border: 2px solid white;
+}
+
+/* Styles for each step */
+.step {
+    width: 250px;
+    height: 30px;
+    display: flex;
+    user-select: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(24, 87, 104);
+    margin-bottom: 5px;
+}
+
+.steps-title {
+    height: 30px;
+    user-select: none;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Styles for the hover message on coin hover */
+.coin:hover .hover-message {
+    display: block;
+}
+
+.hover-message {
+    display: none;
+    position: absolute;
+    bottom: 100%; /* Position above the coin */
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 150px; /* Set a minimum width for the hover message */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2; /* Ensure hover message appears above coins and agents */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.hover-message p {
+    margin: 0;
+    font-size: 14px;
+    color: black;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 600px;
+    max-width: 100%;
+    height: auto;
+    align-items: center;
+}
+
+.title {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    user-select: none;
+    z-index: 4;
+    cursor: default; /* Ensure the title appears above everything */
+}
+
+/* Tooltip styling for agent selectors */
+.agent-tooltip {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    white-space: nowrap;
+    display: none;
+}
+
+.agent-selector:hover .agent-tooltip {
+    display: block;
+}
+
+.agent-tooltip p {
+    margin: 0;
+    font-size: 14px;
+    color: black;
+}
+
+.maps-control-container {
+    position: absolute;
+    top: 90%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    color: white;
+    left: 30%;
+}
+
+.maps-control-container p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
+    border: 2px solid white;
+    padding: 2px;
+    width: 30px;
+    min-width: 30px;
+    height: 20x;
+    text-align: center;
+    user-select: none;
+}
+  
+  /* Add glow effect on hover */
+.clickable:hover {
+    box-shadow: 0 0 10px rgba(38, 214, 35, 0.8);
+}
+
+.map-name {
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 100px;
+    text-align: center;
+    max-width: 100px;
+}
+
+.controls {
+    position: absolute;
+    width: auto;
+    height: auto;
+    left: 3.5%;
+    top: 85%;
+}
+
+.controls p {
+    color: white;
+    font-size: .9rem;
+}
