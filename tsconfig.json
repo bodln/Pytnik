@@ -15,7 +15,7 @@
     "jsx": "react",
 
     "outDir": "./lib/",
-    "rootDir": "./src",
+    "rootDir": "./",
 
     /* Linting */
     "strict": true,
@@ -23,6 +23,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
