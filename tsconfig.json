@@ -5,24 +5,18 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
+    "moduleResolution": "node",
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-
     "outDir": "./lib/",
     "rootDir": "./",
-
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*.d.tsx", "src/*/tsx", "src/App.tsx"],
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
