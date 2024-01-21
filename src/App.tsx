@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import Client, { Agent, IPoint, IStep, MapData } from "./Client";
 import Terrain from "./assets/maps/terrain_upscaled.png";
 import Coin from "./assets/icons/coin.png";
@@ -70,7 +70,7 @@ const App: React.FC = () => {
       return;
     } else {
       moveAgent(currentStep - 1);
-      setSumCost(sumCost - steps[currentStep].cost)
+      setSumCost(sumCost - steps[currentStep].cost);
     }
   };
 
@@ -79,63 +79,63 @@ const App: React.FC = () => {
     setCurrentNode(steps[step].to_node);
     updateAgentPosition(selectedMap.coins[currentNode]);
     setCurrentStep(step);
-    setPauseIndex(step)
+    setPauseIndex(step);
   };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight") {
-        if (!stepMode || agentMoving) return
+        if (!stepMode || agentMoving) return;
         event.preventDefault();
         moveAgentForward();
       } else if (event.key === "ArrowLeft") {
-        if (!stepMode || agentMoving) return
+        if (!stepMode || agentMoving) return;
         event.preventDefault();
         moveAgentBackward();
       } else if (event.key === "Enter") {
         if (!selectedMap || agentMoving || !steps || steps.length < 0) return;
         event.preventDefault();
-        setSumCost(0)
+        setSumCost(0);
         for (let i = 0; i < steps.length; i++) {
           moveAgent(i);
-          setSumCost(prevSumCost => prevSumCost + steps[i].cost);
+          setSumCost((prevSumCost) => prevSumCost + steps[i].cost);
         }
-      } else if ((event.key === "S" || event.key === "s")) {
-        setStepMode(!stepMode)
+      } else if (event.key === "S" || event.key === "s") {
+        setStepMode(!stepMode);
       } else if (event.key === " ") {
         event.preventDefault();
         if (!selectedMap || !steps) return;
-    
-        if(!inTransition){
-          setPauseSimulation(agentMoving)
+
+        if (!inTransition) {
+          setPauseSimulation(agentMoving);
         }
-        
-        if(!agentMoving){
+
+        if (!agentMoving) {
           //setSumCost(0)
           //moveAgent(0);
-          setAgentMoving(true)
-          let i = pauseIndex
+          setAgentMoving(true);
+          let i = pauseIndex;
 
-          if(i == 0) setSumCost(0)
+          if (i == 0) setSumCost(0);
 
           const interval = setInterval(() => {
             if (i >= steps.length) {
               setPauseSimulation(false);
-              setAgentMoving(false)
+              setAgentMoving(false);
               clearInterval(interval);
-              setPauseIndex(0)
-              return
+              setPauseIndex(0);
+              return;
             }
-            console.log("Interval: " + i)
-            setInTransition(true)
+            console.log("Interval: " + i);
+            setInTransition(true);
             //setPauseIndex(i)
-            moveAgent(i)
+            moveAgent(i);
             //setSumCost(prevSumCost => prevSumCost + steps[i].cost);
-            i++
-            setInTransition(false)
+            i++;
+            setInTransition(false);
           }, 600);
 
-          setIntervalId(interval)
+          setIntervalId(interval);
         }
       }
     };
@@ -147,21 +147,22 @@ const App: React.FC = () => {
     };
   }, [moveAgentForward, moveAgentBackward, selectedMap]);
 
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     setupMaps();
   }, []);
 
   useEffect(() => {
-    console.log("Current node: " + currentNode)
+    console.log("Current node: " + currentNode);
   }, [currentNode]);
 
   useEffect(() => {
-    if(pauseSimulation && intervalId != null && !inTransition){
-      clearInterval(intervalId)
-      setIntervalId(null)
-      setAgentMoving(false)
+    if (pauseSimulation && intervalId != null && !inTransition) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+      setAgentMoving(false);
     }
   }, [pauseSimulation]);
 
@@ -169,7 +170,7 @@ const App: React.FC = () => {
     const fetchData = async () => {
       if (selectedMap != null && selectedAgent != null) {
         await calculateSteps();
-        
+
         if (steps != null && steps.length > 0) {
           setCurrentStep(0);
           setCurrentNode(steps[0].to_node);
@@ -177,12 +178,12 @@ const App: React.FC = () => {
         }
       }
 
-      if(selectedMap != null){
+      if (selectedMap != null) {
         setGraph(await Client.getGraph(selectedMap.map_name));
       }
     };
 
-    setSumCost(0)
+    setSumCost(0);
     fetchData();
   }, [selectedMap]);
 
@@ -190,8 +191,8 @@ const App: React.FC = () => {
     if (steps) {
       let totalCost = 0;
       for (let num = 0; num <= currentStep; num++) {
-        if (steps[num]?.from_node !== steps[num]?.to_node) {
-          totalCost += steps[num]?.cost || 0;
+        if (steps[num] && steps[num].from_node !== steps[num].to_node) {
+          totalCost += steps[num].cost || 0;
         }
       }
       setSumCost(totalCost);
@@ -211,15 +212,15 @@ const App: React.FC = () => {
       }
     };
 
-    setSumCost(0)
+    setSumCost(0);
     fetchData();
   }, [selectedAgent]);
 
   useEffect(() => {
     if (mapsData != null) {
-      setSelectedMap(mapsData[0])
+      setSelectedMap(mapsData[0]);
     }
-  }, [mapsData])
+  }, [mapsData]);
 
   const setupMaps = async (): Promise<void> => {
     setLoading(true);
@@ -246,7 +247,10 @@ const App: React.FC = () => {
     setCurrentNode(0);
 
     updateAgentPosition(selectedMap.coins[currentNode]);
-    if (selectedAgent != null) setSteps(await Client.calculateSteps(selectedMap.map_name, selectedAgent.name));
+    if (selectedAgent != null)
+      setSteps(
+        await Client.calculateSteps(selectedMap.map_name, selectedAgent.name)
+      );
   };
 
   const updateAgentPosition = async (point: IPoint): Promise<void> => {
@@ -274,22 +278,30 @@ const App: React.FC = () => {
 
   const navigateToPreviousMap = () => {
     if (mapsData && selectedMap && !agentMoving) {
-      const currentIndex = mapsData.findIndex((map) => map.map_name === selectedMap.map_name);
-      const previousIndex = currentIndex === 0 ? mapsData.length - 1 : currentIndex - 1;
-  
+      const currentIndex = mapsData.findIndex(
+        (map) => map.map_name === selectedMap.map_name
+      );
+      const previousIndex =
+        currentIndex === 0 ? mapsData.length - 1 : currentIndex - 1;
+
       if (currentIndex !== 0) {
         setSelectedMap(mapsData[previousIndex]);
+        moveAgent(0)
       }
     }
   };
-  
+
   const navigateToNextMap = () => {
     if (mapsData && selectedMap && !agentMoving) {
-      const currentIndex = mapsData.findIndex((map) => map.map_name === selectedMap.map_name);
-      const nextIndex = currentIndex === mapsData.length - 1 ? 0 : currentIndex + 1;
-  
+      const currentIndex = mapsData.findIndex(
+        (map) => map.map_name === selectedMap.map_name
+      );
+      const nextIndex =
+        currentIndex === mapsData.length - 1 ? 0 : currentIndex + 1;
+
       if (currentIndex !== mapsData.length - 1) {
         setSelectedMap(mapsData[nextIndex]);
+        moveAgent(0)
       }
     }
   };
@@ -297,56 +309,63 @@ const App: React.FC = () => {
   return (
     <div id="home">
       <div className="title">Pytnik</div>
-      <div className='container'>
-        <div className={`map${selectedMap ? ' margin-bottom' : ''}`} ref={mapRef}>
+      <div className="container">
+        <div
+          className={`map${selectedMap ? " margin-bottom" : ""}`}
+          ref={mapRef}
+        >
           <img src={Terrain} alt="Terrain" />
 
           <div className="map-overlay">
             <div className="footer"></div>
           </div>
 
-          {selectedMap?.coins.map((coin, index) => (
-            <div
-              className="coin"
-              key={`coin-${index}`}
-              style={{
-                left: `${scaleCoinX(coin.x)}px`,
-                top: `${scaleCoinY(coin.y)}px`,
-              }}
-              onMouseEnter={() => {
-                setHoveredCoin(index);
-              }}
-              onMouseLeave={() => {
-                setHoveredCoin(null);
-              }}
-            >
-              <img src={Coin} alt="Coin" />
-              <span>{index}</span>
-              {hoveredCoin == index && (
-                <div className="hover-message">
-                  {selectedMap.coins.map((otherCoin, otherIndex) => (
-                    otherIndex !== index && (
-                      <p key={`cost-${otherIndex}`}>
-                      {`Cena do ${otherIndex}: ${graph[index][otherIndex]}`}
-                    </p>
-                    )
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+          {selectedMap &&
+            selectedMap.coins.map((coin, index) => (
+              <div
+                className="coin"
+                key={`coin-${index}`}
+                style={{
+                  left: `${scaleCoinX(coin.x)}px`,
+                  top: `${scaleCoinY(coin.y)}px`,
+                }}
+                onMouseEnter={() => {
+                  setHoveredCoin(index);
+                }}
+                onMouseLeave={() => {
+                  setHoveredCoin(null);
+                }}
+              >
+                <img src={Coin} alt="Coin" />
+                <span>{index}</span>
+                {hoveredCoin == index && (
+                  <div className="hover-message">
+                    {selectedMap.coins.map(
+                      (otherCoin, otherIndex) =>
+                        otherIndex !== index && (
+                          <p key={`cost-${otherIndex}`}>
+                            {`Cena do ${otherIndex}: ${graph[index][otherIndex]}`}
+                          </p>
+                        )
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
 
-          {selectedAgent != null && (
-            <div
-              className="agent"
-              style={{
-                left: `${scaleCoinX(selectedMap?.coins[currentNode].x)}px`,
-                top: `${scaleCoinY(selectedMap?.coins[currentNode].y)}px`,
-              }}
-            >
-              <img src={selectedAgent.icon} alt={selectedAgent.name} />
-            </div>
-          )}
+          {selectedAgent != null &&
+            selectedMap != null &&
+            selectedMap.coins != null && (
+              <div
+                className="agent"
+                style={{
+                  left: `${scaleCoinX(selectedMap.coins[currentNode].x)}px`,
+                  top: `${scaleCoinY(selectedMap.coins[currentNode].y)}px`,
+                }}
+              >
+                <img src={selectedAgent.icon} alt={selectedAgent.name} />
+              </div>
+            )}
         </div>
         <div className="header">
           {agents.map((agent) => (
@@ -357,42 +376,52 @@ const App: React.FC = () => {
             >
               <img src={agent.icon} alt={agent.name} />
               <p>{agent.name}</p>
-              <div className="agent-tooltip">
-                {getAgentTooltip(agent.name)}
-              </div>
+              <div className="agent-tooltip">{getAgentTooltip(agent.name)}</div>
             </div>
           ))}
         </div>
         {selectedMap && (
-          <div className='steps-container'>
+          <div className="steps-container">
             <div className="steps-title">Koraci:</div>
             <div className="steps">
-              {Array.from({ length: currentStep + 1 }).map((_, num) => (
-                steps?.[num].from_node !== steps?.[num].to_node && (
-                  <div className="step" key={`step-${num}`}>
-                    <p>
-                      {`Korak: ${steps?.[num].step} | ${steps?.[num].from_node} -> ${steps?.[num].to_node} | Cena: ${steps?.[num].cost}`}
-                    </p>
-                  </div>
-                )
-              ))}
+              {Array.from({ length: currentStep + 1 }).map(
+                (_, num) =>
+                  steps &&
+                  steps[num] &&
+                  steps[num].from_node !== steps[num].to_node && (
+                    <div className="step" key={`step-${num}`}>
+                      <p>
+                        {`Korak: ${steps[num].step} | ${steps[num].from_node} -> ${steps[num].to_node} | Cena: ${steps[num].cost}`}
+                      </p>
+                    </div>
+                  )
+              )}
             </div>
             <div className="steps-footer">Ukupna cena: {sumCost}</div>
           </div>
         )}
       </div>
 
-      <div className='controls'>
+      <div className="controls">
         <p>Pokreni/Pauziraj simulaciju - Razmak</p>
         <p>Prikaži konačan rezultat - Enter</p>
-        <p>Uključi/Isključi korake na strelice - S ({stepMode ? ("Uključeno") : ("Isključeno")})</p>
+        <p>
+          Uključi/Isključi korake na strelice - S (
+          {stepMode ? "Uključeno" : "Isključeno"})
+        </p>
       </div>
 
       {selectedMap ? (
         <div className="maps-control-container">
-          <p className='clickable' onClick={navigateToPreviousMap}>{selectedMap.map_name === mapsData[0].map_name ? '/' : '<<'}</p>
-          <p className='map-name'>{selectedMap.map_name}</p>
-          <p className='clickable' onClick={navigateToNextMap}>{selectedMap.map_name === mapsData[mapsData.length - 1].map_name ? '/' : '>>'}</p>
+          <p className="clickable" onClick={navigateToPreviousMap}>
+            {selectedMap.map_name === mapsData[0].map_name ? "/" : "<<"}
+          </p>
+          <p className="map-name">{selectedMap.map_name}</p>
+          <p className="clickable" onClick={navigateToNextMap}>
+            {selectedMap.map_name === mapsData[mapsData.length - 1].map_name
+              ? "/"
+              : ">>"}
+          </p>
         </div>
       ) : null}
     </div>
