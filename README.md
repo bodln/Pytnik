@@ -1,3 +1,29 @@
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/bodln/Pytnik
+```
+
+Go to the project directory
+
+```bash
+  cd Pytnik
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
