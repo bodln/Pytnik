@@ -3,7 +3,7 @@ import axios from "axios";
 export type Agent = "Aki" | "Micko" | "Uki" | "Jocke";
 
 const apiUrl = "http://127.0.0.1:8000" || "http://localhost:8000";
-axios.defaults.baseURL = apiUrl;
+axios.defaults.baseURL = "omer2.pythonanywhere.com";
 
 export interface MapData {
   map_name: string;
