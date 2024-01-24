@@ -18,7 +18,7 @@ Install dependencies
   npm install
 ```
 
-Start the server
+Start the server, but make sure you change axios.defaults.baseURL in the Client.tsx to your backend url
 
 ```bash
   npm run dev
